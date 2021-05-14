@@ -1,0 +1,44 @@
+<MainInterface>
+    Widget:
+        GridLayout:
+            size: root.width, root.height
+            rows_minimum: {0: 70, 1: 300}
+            cols: 1
+            spacing: [50,0]
+            Label:
+                text: "BUENOS DÍAS"
+                bold: True
+                color: [0, 0, 0, 1]
+                font_size: 50
+            GridLayout:
+                rows: 2
+                cols: 3
+                padding: 30
+                spacing: [50,50]
+                Button:
+                    text: "Música"
+                    text_size: self.size
+                    valign: "bottom"
+                    halign: "center"
+                    background_normal: '../images/music.png'
+                    background_down: '../images/music_down.png'
+                Button:
+                    text: "Imágenes"
+                    text_size: self.size
+                    valign: "bottom"
+                    halign: "center"
+                    background_normal: '../images/gallery.png'
+                    background_down: '../images/gallery_down.png'
+                Button:
+                    text: "Videos"
+                    background_color: (90/255, 107/255, 148/255, 1)
+                Button:
+                    text: "Calendario"
+                    background_color: (90/255, 107/255, 148/255, 1)
+                Button:
+                    text: "Clima"
+                    text_size: self.size
+                    valign: "bottom"
+                    halign: "center"
+                    background_normal: '../images/weather.png'
+                    background_down: '../images/weather_down.png'
