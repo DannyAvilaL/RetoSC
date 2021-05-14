@@ -1,4 +1,6 @@
-<MainInterface>
+<MainInterface>:
+    name: "menu"
+    ImagenesMenu:
     Widget:
         GridLayout:
             size: root.width, root.height
@@ -6,7 +8,7 @@
             cols: 1
             spacing: [50,0]
             Label:
-                text: "BUENOS DÍAS"
+                text: root.mensaje
                 bold: True
                 color: [0, 0, 0, 1]
                 font_size: 50
@@ -29,6 +31,7 @@
                     halign: "center"
                     background_normal: '../images/gallery.png'
                     background_down: '../images/gallery_down.png'
+                    on_press: root.manager.current = "pantalla 1"
                 Button:
                     text: "Videos"
                     background_color: (90/255, 107/255, 148/255, 1)
@@ -42,3 +45,13 @@
                     halign: "center"
                     background_normal: '../images/weather.png'
                     background_down: '../images/weather_down.png'
+
+<ImagenesMenu@Screen>:
+    name: "pantalla 1"
+    GridLayout:
+        id: grid_5
+        cols: 5
+        Label:
+            text: "MENU DE IMÁGENES"
+            valign: "middle"
+            halign: "center"
