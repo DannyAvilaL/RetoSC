@@ -19,9 +19,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.properties import StringProperty
+from kivy.lang import Builder
 
 #Importacion de clases
 from imagenesinterfaz import ImagenesMenu
+
+
+kv = Builder.load_file("interface.kv")
+
 
 class MainInterface(Screen):
     """Clase que se encargará de mostrar el menú principal con las
@@ -37,21 +42,27 @@ class MainInterface(Screen):
     elif(hora >= 18):
         mensaje = StringProperty(horarios[3])
 
-    def on_touch_down(self, touch):
-        return super().on_touch_down(touch)
 
-class Interface(App):
+class WindowManager(ScreenManager):
+    pass
+    # sm = ScreenManager()
+    # #for pantalla in range(5):
+    # #    screen = Screen(name = f"pantalla {pantalla}")
+    # #   sm.add_widget(screen)
+    # sm.add_widget(MainInterface())
+    # sm.add_widget(ImagenesMenu())
+    # sm.current = "menu"
+
+    # def on_touch_down(self, touch):
+    #     return super().on_touch_down(touch)
+
+
+class MainApp(App):
 
     def build(self):
-        Window.clearcolor = (1,1,1,1) #color de fondo
-        sm = ScreenManager()
-        #for pantalla in range(5):
-        #    screen = Screen(name = f"pantalla {pantalla}")
-         #   sm.add_widget(screen)
-        sm.add_widget(MainInterface())
-        sm.add_widget(ImagenesMenu())
-        return sm
-        #return MainInterface()
+        Window.clearcolor = (1,1,1,1) #color de fondo        
+        return kv
+        
 
 if __name__ == '__main__':
-    Interface().run()
+    MainApp().run()

@@ -1,6 +1,7 @@
+
+
 <MainInterface>:
     name: "menu"
-    ImagenesMenu:
     Widget:
         GridLayout:
             size: root.width, root.height
@@ -31,7 +32,9 @@
                     halign: "center"
                     background_normal: '../images/gallery.png'
                     background_down: '../images/gallery_down.png'
-                    on_press: root.manager.current = "pantalla 1"
+                    on_release:
+                        root.manager.transition.direction = 'up'
+                        root.manager.current = "pantalla 1"
                 Button:
                     text: "Videos"
                     background_color: (90/255, 107/255, 148/255, 1)
@@ -46,12 +49,22 @@
                     background_normal: '../images/weather.png'
                     background_down: '../images/weather_down.png'
 
-<ImagenesMenu@Screen>:
+<ImagenesMenu>:
     name: "pantalla 1"
-    GridLayout:
-        id: grid_5
-        cols: 5
-        Label:
-            text: "MENU DE IMÁGENES"
-            valign: "middle"
-            halign: "center"
+    Widget:
+        GridLayout:
+            size: root.width, root.height
+            rows_minimum: {0: 70, 1: 300}
+            cols: 1
+            spacing: [50,0]
+            Label:
+                text: "GALERÍA DE IMÁGENES"
+                bold: True
+                color: [0, 0, 0, 1]
+                font_size: 50
+            Button:
+                text: "Home"
+                background_color: (90/255, 107/255, 148/255, 1)
+                on_release:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = "menu"
