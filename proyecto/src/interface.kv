@@ -1,17 +1,61 @@
+#:import utils kivy.utils
+#:import MapView kivy_garden.mapview.MapView
+#:import GpsBlinker gpsblinker.GpsBlinker
+<RootWidget>:
+    MainInterface:
+        id: menu
+        name: 'menu'
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: '../images/mainwallpaper.jpg'
+    weatherScreen:
+        id: weatherid
+        name: 'weatherid'
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: '../images/nubes.jpg'
+    homeVideoScreen:
+        id: homeVideo
+        name: 'homeVideo'
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: '../images/sunnygo.jpg'
+    videoScreen:
+        id: video
+        name: 'video'
+    gpsScreen:
+        id: home_screen
+        name: 'home_screen'
+    Calender:
+        id: calendar
+        name: 'calendar'
+    Reproductor:
+        id: musica
+        name: 'musica'
+
 <MainInterface>:
-    name: "menu"
-    ImagenesMenu:
     Widget:
-        GridLayout:
+        FloatLayout:
             size: root.width, root.height
-            rows_minimum: {0: 70, 1: 300}
-            cols: 1
-            spacing: [50,0]
             Label:
                 text: root.mensaje
                 bold: True
                 color: [0, 0, 0, 1]
-                font_size: 50
+                font_size: 30
+                font_name: 'RobotoMono-Regular'
+            Label:
+                text: root.horario
+                size_hint: .1,.1
+                pos_hint: {'top':.9}
+                color: [1, 1, 1, 1]
+                font_size: 10
+                font_name: 'RobotoMono-Regular'
             GridLayout:
                 rows: 2
                 cols: 3
@@ -24,20 +68,12 @@
                     halign: "center"
                     background_normal: '../images/music.png'
                     background_down: '../images/music_down.png'
-                Button:
-                    text: "Imágenes"
-                    text_size: self.size
-                    valign: "bottom"
-                    halign: "center"
-                    background_normal: '../images/gallery.png'
-                    background_down: '../images/gallery_down.png'
-                    on_press: root.manager.current = "pantalla 1"
-                Button:
-                    text: "Videos"
-                    background_color: (90/255, 107/255, 148/255, 1)
-                Button:
-                    text: "Calendario"
-                    background_color: (90/255, 107/255, 148/255, 1)
+                    font_size: 30
+                    font_name: 'RobotoMono-Regular'
+                    on_release:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = "musica"
+
                 Button:
                     text: "Clima"
                     text_size: self.size
@@ -45,13 +81,463 @@
                     halign: "center"
                     background_normal: '../images/weather.png'
                     background_down: '../images/weather_down.png'
+                    font_size: 30
+                    font_name: 'RobotoMono-Regular'
+                    on_release:
+                        root.manager.transition.direction = 'up'
+                        root.manager.current = "weatherid"
+                Button:
+                    text: "GPS"
+                    text_size: self.size
+                    valign: "bottom"
+                    halign: "center"
+                    background_normal: '../images/gps.png'
+                    background_down: '../images/gps_down.png'
+                    font_size: 30
+                    font_name: 'RobotoMono-Regular'
+                    on_release:
+                        root.manager.transition.direction = 'up'
+                        root.manager.current = "home_screen"
+                Button:
+                    text: "Calendario"
+                    text_size: self.size
+                    valign: "bottom"
+                    halign: "center"
+                    background_normal: '../images/calendar.png'
+                    background_down: '../images/calendar_down.png'
+                    font_size: 24
+                    font_name: 'RobotoMono-Regular'
+                    on_release:
+                        root.manager.transition.direction = 'up'
+                        root.manager.current = "calendar"
+                Button:
+                    text: "Videos"
+                    text_size: self.size
+                    valign: "bottom"
+                    halign: "center"
+                    background_normal: '../images/video.png'
+                    background_down: '../images/video_back.png'
+                    font_size: 30
+                    font_name: 'RobotoMono-Regular'
+                    on_release:
+                        root.manager.transition.direction = 'up'
+                        root.manager.current = "homeVideo"
+<weatherScreen>:
+    Widget:
+        GridLayout:
+            size: root.width, root.height
+            rows_minimum: {0: 20, 1: 20}
+            cols: 1
+            spacing: [50,0]
+            MDTextFieldRound:
+                hint_text: 'City name'
+                id: city_name
+                pos_hint: {'top':.9,'left':1}
+                size_hint: .5,.06
+            MDTextFieldRound:
+                hint_text: 'Country name'
+                id: country_name
+                pos_hint: {'top':.9,'right':1}
+                size_hint: .5,.06
+            MDRaisedButton:
+                text: 'SEARCH'
+                pos_hint:{'top':0.8,'right':.7}
+                size_hint: .35,.08
+                on_release:
+                    root.search()
+            FloatLayout:
+                Label:
+                    text:'Temperatura: '
+                    font_size:15
+                    pos_hint:{'top':0.95, 'right':.4}
+                    size_hint: .33,.1
+                    color:0,0,0,1
+                    font_name: 'RobotoMono-Regular'
+                Label:
+                    text: root.weather
+                    font_size:20
+                    pos_hint:{'top':0.95, 'right':.55}
+                    size_hint: .33,.1
+                    color: 0,0,1,1
+                    font_name: 'RobotoMono-Regular'
+                Label:
+                    text: root.description
+                    font_size:30
+                    pos_hint:{'top':0.9,'right':1}
+                    size_hint: .5,.1
+                    color:0,0,1,1
+                Label:
+                    text:'Ubicación:'
+                    font_size:15
+                    pos_hint:{'top':0.7,'left':1}
+                    size_hint: .33,.1
+                    color:0,0,0,1
+                    font_name: 'RobotoMono-Regular'
+                Label:
+                    text:'Fecha/Hora: '
+                    markup: True
+                    font_size:15
+                    pos_hint:{'top':0.5,'left':1}
+                    size_hint: .33,.1
+                    color:0,0,0,1
+                    font_name: 'RobotoMono-Regular'
+                Label:
+                    text:'Humedad: '
+                    font_size:15
+                    pos_hint:{'top':0.26,'left':1}
+                    size_hint: .33,.1
+                    color:0,0,0,1
+                    font_name: 'RobotoMono-Regular'
+                #info
+                Label:
+                    text: root.location
+                    font_size: 15
+                    pos_hint:{'top':0.6,'right':.45}
+                    size_hint: .33,.1
+                    color: 145/255.0, 0/255.0, 139/255.0, 1
+                    font_name: 'RobotoMono-Regular'
+                Label:
+                    text: root.time
+                    font_size: 15
+                    pos_hint:{'top':0.4,'right':.4}
+                    size_hint: .33,.1
+                    color: 145/255.0, 0/255.0, 139/255.0, 1
+                    font_name: 'RobotoMono-Regular'
+                Image:
+                    pos_hint: {'top':0.9,'right':1}
+                    size_hint: .5,.5 #width, heigth
+                    source: '../images/Passingclouds.png'
+                Label:
+                    text: root.humidity
+                    font_size: 15
+                    pos_hint:{'top':0.26,'right':0.4}
+                    size_hint: .33,.1
+                    color: 145/255.0, 0/255.0, 139/255.0, 1
+                MDIconButton:
+                    icon:'arrow-left'
+                    pos_hint:{'top':0.3,'right':1}
+                    size_hint:.5,.1
+                    user_font_size: '64sp'
+                    on_release:
+                        root.manager.transition.direction = 'up'
+                        root.manager.current = "menu"
 
-<ImagenesMenu@Screen>:
-    name: "pantalla 1"
-    GridLayout:
-        id: grid_5
-        cols: 5
+<homeVideoScreen>:
+    FloatLayout:
         Label:
-            text: "MENU DE IMÁGENES"
-            valign: "middle"
-            halign: "center"
+            text: 'Reproductor de vídeo'
+            font_size: 30
+            pos_hint:{'top':.4, 'right':.8}
+            size_hint: 1,.1
+            color: 1,1,1,1
+            font_name: 'RobotoMono-Regular'
+        MDRaisedButton:
+            text:'Elige un video'
+            pos_hint:{'top':0.5,'right':.55}
+            size_hint:.5,.1
+            on_release:
+                app.choose_video()
+        MDIconButton:
+            icon:'arrow-left'
+            pos_hint:{'top':0.6,'right':.8}
+            size_hint:1,.1
+            user_font_size: '64sp'
+            on_release:
+                app.change_screen('menu')
+
+<videoScreen>:
+    FloatLayout:
+        MDIconButton:
+            icon:'arrow-left'
+            pos_hint:{'top':1,'left':1}
+            size_hint:.5,.1
+            user_font_size: '64sp'
+            on_release:
+                app.change_screen('menu')
+        MDSlider:
+            id: volume_slider
+            pos_hint:{'top':1,'right':1}
+            size_hint:.5,.1
+            min: 0
+            max: 1
+            value: 1
+            on_touch_up:
+                app.change_volume()
+        VideoPlayer:
+            pos_hint:{'top':0.9}
+            size_hint: 1,.9
+            source: app.video
+            state: 'play'
+            volume: app.volume
+
+<gpsScreen>:
+    FloatLayout:
+        MDToolbar:
+            title: "Busque direcciones en el mapa"
+            right_action_items: [['magnify', lambda x: app.search_menu.open()]]
+            md_bg_color: app.theme_cls.primary_light
+            pos_hint: {"top": .895, "left": 1}
+            size_hint: 1, .1
+        HomeMapView:
+            pos_hint: {"top": .795, "left": 1}
+            size_hint: 1, 1
+            id: mapview
+        MDIconButton:
+            icon:'arrow-left'
+            pos_hint:{'top':1,'left':1}
+            size_hint:.5,.1
+            user_font_size: '64sp'
+            on_release:
+                root.manager.transition.direction = 'up'
+                root.manager.current = "menu"
+
+<HomeMapView>:
+    lat: 19.4978
+    lon: -99.1269
+    zoom: 12
+    double_tap_zoom: True
+    on_zoom:
+        self.zoom = 12 if self.zoom < 12 else self.zoom # set minimum zoom = 12
+    GpsBlinker:
+        lat: root.lat
+        lon: root.lon
+        id: blinker
+
+<GpsBlinker>:
+    default_blink_size: 25
+    blink_size: 25
+    source: 'kivymd/images/transparent.png'
+    outer_opacity: 1
+
+    canvas.before:
+        # Outer circle
+        Color:
+            rgba: app.theme_cls.primary_color[:3] + [root.outer_opacity]
+
+        RoundedRectangle:
+            radius: [root.blink_size/2.0, ]
+            size: [root.blink_size, root.blink_size]
+            pos: [root.pos[0] + root.size[0]/2.0 - root.blink_size/2.0, root.pos[1] + root.size[1]/2.0 - root.blink_size/2.0]
+
+        # Inner Circle
+        Color:
+            rgb: 1,1,1
+        RoundedRectangle:
+            radius: [root.default_blink_size/2.0, ]
+            size: [root.default_blink_size, root.default_blink_size]
+            pos: [root.pos[0] + root.size[0]/2.0 - root.default_blink_size/2.0, root.pos[1] + root.size[1]/2.0 - root.default_blink_size/2.0]
+
+<Button>:
+	background_color: 204/255, 204/255, 204/255, 1
+
+<Calender>:
+	canvas.before:
+		Color:
+			rgba: 204/255, 102/255, 153/255, 1
+		Rectangle:
+			pos: self.pos
+			size: self.size
+	orientation:'vertical'
+	BoxLayout:
+		size_hint:1,.1
+		Select:
+	BoxLayout:
+		Months:
+		BoxLayout:
+			orientation: 'vertical'
+			Days:
+			Dates:
+	BoxLayout:
+		size_hint:1,.1
+		Status:
+    MDIconButton:
+        icon:'arrow-left'
+        pos_hint:{'top':1,'right':1}
+        size_hint:.5,.1
+        user_font_size: '64sp'
+        on_release:
+            root.manager.transition.direction = 'up'
+            root.manager.current = "menu"
+
+<Status>:
+	canvas.before:
+		Color:
+			rgba: 0,0,0,1
+		Rectangle:
+			pos: self.pos
+			size: self.size
+	Label:
+		id: yo
+		text:'Current Date and Time:'
+	Label:
+		id: _tnd
+		text: app.time
+
+<Months>:
+	orientation: 'vertical'
+	size_hint: .2,1
+	Button:
+		id:btn_jan
+		text:"Enero"
+		on_release: btn_jan.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_feb
+		text:"Febrero"
+		on_release: btn_feb.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_mar
+		text:"Marzo"
+		on_release: btn_mar.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_april
+		text:"Abril"
+		on_release: btn_april.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_may
+		text:"Mayo"
+		on_release: btn_may.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_june
+		text:"Junio"
+		on_release: btn_june.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_july
+		text:"Julio"
+		on_release: btn_july.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_aug
+		text:"Agosto"
+		on_release: btn_aug.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_sept
+		text:"Septiembre"
+		on_release: btn_sept.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_oct
+		text:"Octubre"
+		on_release: btn_oct.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_nov
+		text:"Noviembre"
+		on_release: btn_nov.background_color = 255/255, 153/255, 194/255, 1
+	Button:
+		id: btn_dec
+		text: "Diciembre"
+		on_release: btn_dec.background_color = 255/255, 153/255, 194/255, 1
+
+<Days@GridLayout>:
+	cols: 7
+	size_hint: 1,.2
+	canvas.before:
+		Color:
+			rgba: 204/255, 98/255, 143/255, 1
+		Rectangle:
+			pos: self.pos
+			size: self.size
+	Label:
+		text:'Lunes'
+	Label:
+		text:'Martes'
+	Label:
+		text:'Miercoles'
+	Label:
+		text:'Jueves'
+	Label:
+		text:'Viernes'
+	Label:
+		text:'Sabado'
+	Label:
+		text:'Domingo'
+
+<Reproductor>:
+    name: "musica"
+    GridLayout:
+        rows: 3
+        rows_minimum: {0: 5, 1: 250, 2: 150}
+        padding: 10
+        spacing: 10
+        size: root.width, root.height
+        GridLayout:
+            cols: 2
+            padding: 10
+            spacing: 10
+            size: root.width, 100
+            size_hint: 1, 1
+            Button:
+                text: "Home"
+                size_hint: 0.2, 0.05
+                size: 30, 10
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = "menu"
+            Label:
+                text: root.hora
+                color: [0, 0, 0, 1]
+                font_size: 10
+                size_hint: 0.8, 0.05
+                #text_align: 'left'
+                halign: 'left'
+        FloatLayout:
+            size: root.width, root.height
+            Image: #portada de cancion
+                source: root.portada
+                pos: -180, 350
+                size: 40, 40
+                size_hint_y: 0.5
+            Label: #nombre de cancion
+                text: root.nombre
+                color: [36/255, 36/255, 148/255, 1]
+                font_size: 30
+                bold: True
+                text_size: self.size
+                pos_hint: {'x': 0.4, 'y': 0.7}
+                pos: 0, 250
+                halign: 'left'
+            Label: #album, año, artista de cancion
+                text: root.info
+                color: [19/255, 19/255, 117/255, 1]
+                font_size: 15
+                bold: True
+                text_size: self.size
+                pos_hint: {'x': 0.4, 'y': 0.6}
+                pos: 0, 230
+                halign: 'left'
+            Label: #duracion total de la cancion
+                text: root.duracionStr
+                color: [19/255, 19/255, 117/255, 1]
+                font_size: 10
+                text_size: self.size
+                pos_hint: {'x': 0.9, 'y': 0.52}
+            GridLayout:
+                cols: 5
+                pos: 0, 250
+                size_hint: 1.0, 0.20
+                padding: 10, 10
+                Button:
+                    text: "SHUFFLE"
+                    on_release: root.shuffle()
+                Button:
+                    text: "PREVIA"
+                    on_release: root.prevSong()
+                Button:
+                    text: root.estado
+                    on_release: root.statusSong()
+                Button:
+                    text: "SIGUIENTE"
+                    on_release: root.nextSong()
+                Button:
+                    text: "LOOP"
+                    on_release: root.repeat()
+
+<TimeStampSTR@Label>:
+    text_size: self.size
+    font_size: 10
+    font_size: 10
+
+<Scroll@ScrollView>:
+
+
+<SongButton@Button>:
+
+<AddSongButton@Button>:
+    on_release: self.agregar()
