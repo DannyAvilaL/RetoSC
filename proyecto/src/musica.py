@@ -1,3 +1,13 @@
+'''
+Programa que mostrará la interfaz gráfica de la aplicación de música donde el usuario podrá navegar por
+las diferentes opciones disponibles.
+Se podrá reproducir música, crear playlists, reproducir una sola canción o los playlist en loop
+Muestra las canciones de la carpeta de música y al reproducirse el título, el tiempo y una imágen
+
+Autora: Nancy L. García Jiménez A01378043
+Autora: Daniela Avila Luna      A01378664
+
+'''
 import os
 os.environ['KIVY_AUDIO'] = 'sdl2'
 #os.environ["KIVY_AUDIO"] = "ffpyplayer" 

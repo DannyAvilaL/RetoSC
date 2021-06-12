@@ -1,6 +1,7 @@
 from kivy_garden.mapview import MapMarker
 from kivy.animation import Animation
 
+#Clase que hace la animación del indicador led de la posición seleccionada por el usuario
 class GpsBlinker(MapMarker):
 
     def blink(self):
@@ -15,6 +16,3 @@ class GpsBlinker(MapMarker):
         self.outer_opacity = 1
         self.blink_size = self.default_blink_size
         self.blink()
-
-    # blink --> outer_opacity = 0, blink_size = 50
-    # reset --> outer_opacity = 1, blink_size = default = 25

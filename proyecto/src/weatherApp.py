@@ -14,13 +14,15 @@ from kivy.metrics import dp
 from bs4 import BeautifulSoup
 import requests
 
+#clase de la pantalla del clima
 class weatherScreen(Screen):
     weather = StringProperty()
     location = StringProperty()
     time = StringProperty()
     humidity = StringProperty()
     description = StringProperty()
-
+    
+    #clase que consigue la información del clima con web scraping
     def search(self):
         try:
             city_name = self.ids.city_name.text

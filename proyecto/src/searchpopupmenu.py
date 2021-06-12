@@ -4,12 +4,12 @@ from kivy.network.urlrequest import UrlRequest
 from kivy.app import App
 import certifi
 from kivy.clock import Clock
-# Para el snackbar
-from kivymd.uix.snackbar import Snackbar
-from kivy.core.window import Window
-from kivy.metrics import dp
+
+#apikey obtenida de geocoder para obtener latitud y longitud
 apikey_ = "2qLan9CBSfj1Nd9QT3qCCkrT02Lx5qqh3XyRGDwmOYE"
 
+#Clase con excepciones que despliega el menú de búsqueda y en caso de que sea válido
+#hace el request al api
 class SearchPopupMenu(MDInputDialog):
 
     title = 'Ingrese la dirección'
